@@ -18,7 +18,7 @@
       <div class="container">
         <div class="row">
           <h1>List of Articles
-            <button class="btn btn-primary" data-toggle="model" data-target="#addArticleModal">ADD ARTIICLE</button>
+            <button class="btn btn-primary" data-toggle="modal" data-target="#addArticleModal">ADD ARTIICLE</button>
           </h1>
           <table class="table">
             <thead>
@@ -41,39 +41,43 @@
           </table>
           <div class="modal fade" id="addArticleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
             <div class="modal-dialog" role="document">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">ADD ARTICLE</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLongTitle">ADD ARTICLE</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <form v-on:submit.prevent="addArticle()">
+                  <div class="form-body">
+                    <div class="form-group">
+                      <label for="article_heading">Article Heading</label>
+                      <input
+                       type="text"
+                       class="form-control"
+                       id="article_heading"
+                       placeholder="Enter Article Heading"
+                       v-model="newArticle.article_heading"
+                       required="required" >
+                    </div>
+                    <div class="form-group">
+                      <label for="article_body">Article Body</label>
+                      <textarea class="form-control"
+                        id="article_body"
+                        placeholder="Enter Article Body"
+                        v-model="newArticle.article_body"
+                        required="required"
+                        rows="3" ></textarea>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                  </div>
+                </form>
               </div>
-              <form v-on:submit.prevent="addArticle()">
-                <div class="form-body">
-                  <div class="form-group">
-                    <label for="article_heading">Article Heading</label>
-                    <input type="text"
-                    class="form-control"
-                    id="article_heading"
-                    placeholder="Enter Article Heading"
-                    v-model="newArticle.article_heading"
-                    required="required">
-                  </div>
-                  <div class="form-group">
-                    <label for="article_body">Article Body</label>
-                    <textarea class="form-control"
-                      id="article_body"
-                      placeholder="Enter Article Body"
-                      v-model="newArticle.article_body"
-                      required="required"
-                      rows="3" ></textarea>
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-primary">Save Changes</button>
-                </div>
-              </form>
             </div>
+            <div class="loading" v-if="loading===true">Loading&#8230;</div>
           </div>
         </div>
       </div>
@@ -107,9 +111,9 @@
             console.log(err);
           })
         },
-        getArticle: function() {
+        getArticle: function(id) {
           this.loading = true;
-          this.$http.get('/api/article')
+          this.$http.get(`/api/article/${id}/`)
           .then((response) => {
             this.currentArticle = response.data;
             $("#editArticleModal").modal('show');
@@ -134,7 +138,7 @@
         },
         updateArticle: function() {
           this.loading = true;
-          this.$http.put('/api/article/${this.currentArticle.article_id}/', this.currentArticle)
+          this.$http.put(`/api/article/${this.currentArticle.article_id}/`, this.currentArticle)
           .then((response) => {
             this.loading = false;
             this.currentArticle = response.data;
@@ -147,7 +151,7 @@
         },
         deleteArticle: function(id) {
           this.loading = true;
-          this.$http.delete('/api/article/${id}'/)
+          this.$http.delete(`/api/article/${id}/`)
           .then((response) => {
             this.loading = false;
             this.getArticles();
