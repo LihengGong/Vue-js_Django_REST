@@ -9,6 +9,5 @@ This is demo code to demostrate using
 
 
 Todos
-- Fix the bugs.
-- Integrate Pushpin to realize real-time push.
 - Use standalone Vue code instead of embedded index.html
+- Integrate Pushpin to realize real-time push.
