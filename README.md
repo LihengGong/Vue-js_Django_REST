@@ -8,4 +8,7 @@ This is demo code to demostrate using
  - REST Framework to provide WebAPIs
 
 
-There is still bug in the code and these bugs will be fixed soon.
+Todos
+- Fix the bugs.
+- Integrate Pushpin to realize real-time push.
+- Use standalone Vue code instead of embedded index.html
